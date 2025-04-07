@@ -1,4 +1,4 @@
-import logo from "./images/logo.png";
+import logo from "./images/ali_latif_logo_2.png";
 import bannerImg from "./images/banner.jpg";
 import projectOne from "./images/projects/projectOne.jpg";
 import projectTwo from "./images/projects/projectTwo.jpg";
