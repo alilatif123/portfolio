@@ -1,6 +1,6 @@
 import React from 'react'
-import {FaLinkedinIn, FaReact, FaGithub, FaNodeJs } from "react-icons/fa";
-import { SiNextdotjs, SiUpwork, SiPostgresql } from "react-icons/si";
+import {FaLinkedinIn,  FaGithub,  } from "react-icons/fa";
+import { SiDiscord } from "react-icons/si";
 const Media = () => {
   return (
     <div className="flex flex-col xl:flex-row gap-6 lgl:gap-0 justify-between">
@@ -16,7 +16,7 @@ const Media = () => {
               <FaGithub />
             </span>
             <span className="bannerIcon">
-            <SiUpwork />
+            <SiDiscord />
             </span>
            
           </div>

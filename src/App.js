@@ -19,10 +19,10 @@ function App() {
         <Banner />
         <Features />
         <Projects />
-        <Resume />
+        {/* <Resume /> */}
         <Testimonial />
         <Contact />
-        <Footer />
+        {/* <Footer /> */}
         <FooterBottom />
       </div>
     </div>

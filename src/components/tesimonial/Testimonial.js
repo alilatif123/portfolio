@@ -1,258 +1,190 @@
-import React,{useState} from 'react'
-import Slider from "react-slick";
-import { RiStarFill } from "react-icons/ri";
-import { HiArrowRight, HiArrowLeft } from "react-icons/hi";
-import Title from '../layouts/Title'
-import { testimonialOne,testimonialTwo, quote } from "../../assets";
-
-
-function SampleNextArrow(props) {
-  const { onClick } = props;
-  return (
-    <div
-      className="w-14 h-12 bg-[#0c1821] hover:bg-black duration-300 rounded-md text-2xl text-gray-400 flex justify-center items-center absolute top-0 right-0 shadow-shadowOne cursor-pointer z-10"
-      onClick={onClick}
-    >
-      <HiArrowRight />
-    </div>
-  );
-}
-
-function SamplePrevArrow(props) {
-  const { onClick } = props;
-  return (
-    <div
-      className="w-14 h-12 bg-[#0c1821] hover:bg-black duration-300 rounded-md text-2xl text-gray-400 flex justify-center items-center absolute top-0 right-20 shadow-shadowOne cursor-pointer z-10"
-      onClick={onClick}
-    >
-      <HiArrowLeft />
-    </div>
-  );
-}
+import React, { useState, useEffect } from 'react';
+import { FaStar, FaQuoteRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Title from '../layouts/Title';
 
 const Testimonial = () => {
-      const [dotActive, setDocActive] = useState(0);
-     const settings = {
-       dots: true,
-       infinite: true,
-       speed: 500,
-       slidesToShow: 1,
-       slidesToScroll: 1,
-       nextArrow:<SampleNextArrow />,
-       prevArrow:<SamplePrevArrow />,
-       beforeChange: (prev, next) => {
-         setDocActive(next);
-       },
-       appendDots: (dots) => (
-         <div
-           style={{
-             borderRadius: "10px",
-             padding: "10px",
-           }}
-         >
-           <ul
-             style={{
-               display: "flex",
-               gap: "15px",
-               justifyContent: "center",
-               marginTop: "20px",
-             }}
-           >
-             {" "}
-             {dots}{" "}
-           </ul>
-         </div>
-       ),
-       customPaging: (i) => (
-         <div
-           style={
-             i === dotActive
-               ? {
-                   width: "12px",
-                   height: "12px",
-                   color: "blue",
-                   background: "#ff014f",
-                   borderRadius: "50%",
-                   cursor: "pointer",
-                 }
-               : {
-                   width: "12px",
-                   height: "12px",
-                   color: "blue",
-                   background: "gray",
-                   borderRadius: "50%",
-                   cursor: "pointer",
-                 }
-           }
-         ></div>
-       ),
-     };
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  const testimonials = [
+    {
+      id: 1,
+      name: "John Smith",
+      position: "CEO",
+      company: "TechVision Inc.",
+      image: "/testimonial-avatar-1.jpg",
+      project: "Corporate Website Redesign",
+      date: "January 2025",
+      rating: 5,
+      content: "The team delivered exceptional results that exceeded our expectations. Their attention to detail and professional approach made the entire process seamless and efficient. We've seen a 40% increase in user engagement since launch."
+    },
+    {
+      id: 2,
+      name: "Sarah Johnson",
+      position: "Marketing Director",
+      company: "Global Brands",
+      image: "/testimonial-avatar-2.jpg",
+      project: "Brand Identity Development",
+      date: "December 2024",
+      rating: 5,
+      content: "Working with this team was a pleasure from start to finish. They understood our vision immediately and translated it into a beautiful design that perfectly represents our brand values and appeals to our target audience."
+    },
+    {
+      id: 3,
+      name: "Michael Chen",
+      position: "Product Manager",
+      company: "Innovatech Solutions",
+      image: "/testimonial-avatar-3.jpg",
+      project: "Mobile App UI/UX Design",
+      date: "November 2024",
+      rating: 5,
+      content: "The level of creativity and technical expertise demonstrated throughout our project was impressive. Our app now has an intuitive interface that our users love, resulting in significantly improved retention metrics."
+    }
+  ];
+
+  // Auto-rotate testimonials with a longer interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isTransitioning) {
+        nextSlide();
+      }
+    }, 10000); // Increased to 10 seconds for a more professional feel
+    
+    return () => clearInterval(interval);
+  }, [currentIndex, isTransitioning]);
+
+  const nextSlide = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => 
+      prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
+    );
+    setTimeout(() => setIsTransitioning(false), 600);
+  };
+
+  const prevSlide = () => {
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
+    );
+    setTimeout(() => setIsTransitioning(false), 600);
+  };
+
+  const goToSlide = (index) => {
+    if (isTransitioning || index === currentIndex) return;
+    setIsTransitioning(true);
+    setCurrentIndex(index);
+    setTimeout(() => setIsTransitioning(false), 600);
+  };
+
   return (
-    <section
-      id="testimonial"
-      className="w-full py-20 border-b-[1px] border-b-black"
-    >
-      <div className="flex justify-center items-center text-center">
-        <Title title="WHAT CLIENTS SAY" des="Testimonial" />
-      </div>
-      <div className="max-w-6xl mx-auto">
-        {/* ================ Slider One ================== */}
-        <Slider {...settings}>
-          <div className="w-full">
-            <div className="w-full h-auto flex flex-col lgl:flex-row justify-between">
-              <div className="w-full lgl:w-[35%] h-full bg-gradient-to-r from-[#1e2024] to-[#23272b] p-8 rounded-lg shadow-shadowOne flex flex-col md:flex-row lgl:flex-col gap-8 justify-center md:justify-start lgl:justify-center">
-                <img
-                  className="h-72 md:h-32 lgl:h-72 rounded-lg object-cover"
-                  src={testimonialOne}
-                  alt="testimonialOne"
-                />
-                <div className="w-full flex flex-col justify-end">
-                  <p className="text-xs uppercase text-designColor tracking-wide mb-2">
-                    Bound - Trolola
-                  </p>
-                  <h3 className="text-2xl font-bold">Jone Duone Joe</h3>
-                  <p className="text-base tracking-wide text-gray-500">
-                    Operation Officer
-                  </p>
-                </div>
-              </div>
-              <div className="w-full lgl:w-[60%] h-full flex flex-col justify-between">
-                <img className="w-20 lgl:w-32" src={quote} alt="quote" />
-                <div className="w-full h-[70%] py-10 bg-gradient-to-r from-[#1e2024] to-[#23272b] rounded-lg shadow-shadowOne p-4 lgl:p-8 flex flex-col justify-center gap-4 lgl:gap-8">
-                  <div className="flex flex-col justify-between lgl:items-center py-6 border-b-2 border-b-gray-900">
-                    <div>
-                      <h3 className="text-xl lgl:text-2xl font-medium tracking-wide">
-                        Travel Mobile App Design.
-                      </h3>
-                      <p className="text-base text-gray-400 mt-3">
-                        via Upwork - Mar 4, 2015 - Aug 30, 2021 test
-                      </p>
-                    </div>
-                    <div className="text-yellow-500 flex gap-1">
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
+    <section id="testimonial" className="w-full py-24 font-['Poppins',sans-serif]">
+      <div className="container mx-auto px-6">
+        <div className="mb-16 text-center">
+          <Title 
+            title="CLIENT TESTIMONIALS" 
+            des="What Our Clients Say"
+          />
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative">
+          <div
+            className={`w-full rounded-2xl shadow-lg overflow-hidden border border-gray-100 transition-opacity duration-300 ${isTransitioning ? 'opacity-70' : 'opacity-100'}`}
+          >
+            <div className="flex flex-col lg:flex-row">
+              {/* Client Info - Fixed alignment */}
+              <div className="w-full lg:w-2/5 bg-gradient-to-tr from-[#E6C200] to-[#f0d14b] p-8 lg:p-12 flex flex-col items-center justify-center text-center relative">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="mb-8 relative">
+                    <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-md mx-auto">
+                      <img
+                        src={testimonials[currentIndex].image}
+                        alt={testimonials[currentIndex].name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
-                  <p className="text-base font-titleFont text-gray-400 font-medium tracking-wide leading-6">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
-                    dolorum, eos natus ipsum numquam veniam officia
-                    necessitatibus ratione quos debitis exercitationem
-                    repudiandae facilis id neque nihil accusantium perspiciatis
-                    repellat? Iste.
-                  </p>
+                  <div className="text-center">
+                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">{testimonials[currentIndex].name}</h3>
+                    <p className="text-white text-lg font-medium mb-1">{testimonials[currentIndex].position}</p>
+                    <p className="text-white/90 text-sm">{testimonials[currentIndex].company}</p>
+                  </div>
+                </div>
+                
+                {/* Subtle decorative elements */}
+                <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-white/5"></div>
+                <div className="absolute -top-12 -left-12 w-36 h-36 rounded-full bg-white/5"></div>
+              </div>
+              
+              {/* Testimonial Content */}
+              <div className="w-full lg:w-3/5 p-8 lg:p-14 flex flex-col justify-between ">
+                <div>
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-gray-200">
+                    <div>
+                      <h4 className="text-xl md:text-2xl font-bold text-gray-200 mb-1">{testimonials[currentIndex].project}</h4>
+                      <p className="text-sm text-gray-400">{testimonials[currentIndex].date}</p>
+                    </div>
+                    <div className="flex mt-3 sm:mt-0">
+                      {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
+                        <FaStar key={i} className="text-[#E6C200] text-lg md:text-xl mr-1" />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="relative mb-8">
+                    <FaQuoteRight className="absolute -top-4 -left-2 text-[#E6C200]/15 text-6xl" />
+                    <p className="text-gray-300 leading-relaxed text-lg  pl-10 pt-4">
+                      "{testimonials[currentIndex].content}"
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Navigation */}
+                <div className="mt-auto pt-6 flex flex-col sm:flex-row justify-between items-center">
+                  {/* Navigation Dots */}
+                  <div className="flex gap-2 mb-6 sm:mb-0">
+                    {testimonials.map((_, index) => (
+                      <button 
+                        key={index}
+                        onClick={() => goToSlide(index)}
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          index === currentIndex 
+                            ? 'bg-[#E6C200] w-8' 
+                            : 'bg-gray-300 hover:bg-gray-400 w-2'
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Navigation Arrows */}
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={prevSlide}
+                      className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-[#E6C200] transition-all duration-300"
+                      aria-label="Previous testimonial"
+                      disabled={isTransitioning}
+                    >
+                      <FaChevronLeft className="text-lg" />
+                    </button>
+                    <button 
+                      onClick={nextSlide}
+                      className="w-10 h-10 rounded-full bg-[#E6C200] flex items-center justify-center text-white hover:bg-[#d4b100] transition-all duration-300"
+                      aria-label="Next testimonial"
+                      disabled={isTransitioning}
+                    >
+                      <FaChevronRight className="text-lg" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* ================ Slider Two ================== */}
-
-          <div className="w-full">
-            <div className="w-full h-auto flex flex-col lgl:flex-row justify-between">
-              <div className="w-full lgl:w-[35%] h-full bg-gradient-to-r from-[#1e2024] to-[#23272b] p-8 rounded-lg shadow-shadowOne flex flex-col md:flex-row lgl:flex-col gap-8 justify-center md:justify-start lgl:justify-center">
-                <img
-                  className="h-72 md:h-32 lgl:h-72 rounded-lg object-cover"
-                  src={testimonialTwo}
-                  alt="testimonialTwo"
-                />
-                <div className="w-full flex flex-col justify-end">
-                  <p className="text-xs uppercase text-designColor tracking-wide mb-2">
-                    Bound - Trolola
-                  </p>
-                  <h3 className="text-2xl font-bold">Jone Duone Joe</h3>
-                  <p className="text-base tracking-wide text-gray-500">
-                    Operation Officer
-                  </p>
-                </div>
-              </div>
-              <div className="w-full lgl:w-[60%] h-full flex flex-col justify-between">
-                <img className="w-20 lgl:w-32" src={quote} alt="quote" />
-                <div className="w-full h-[70%] py-10 bg-gradient-to-r from-[#1e2024] to-[#23272b] rounded-lg shadow-shadowOne p-4 lgl:p-8 flex flex-col justify-center gap-4 lgl:gap-8">
-                  <div className="flex flex-col justify-between lgl:items-center py-6 border-b-2 border-b-gray-900">
-                    <div>
-                      <h3 className="text-xl lgl:text-2xl font-medium tracking-wide">
-                        Travel Mobile App Design.
-                      </h3>
-                      <p className="text-base text-gray-400 mt-3">
-                        via Upwork - Mar 4, 2015 - Aug 30, 2021 test
-                      </p>
-                    </div>
-                    <div className="text-yellow-500 flex gap-1">
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                    </div>
-                  </div>
-                  <p className="text-base font-titleFont text-gray-400 font-medium tracking-wide leading-6">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
-                    dolorum, eos natus ipsum numquam veniam officia
-                    necessitatibus ratione quos debitis exercitationem
-                    repudiandae facilis id neque nihil accusantium perspiciatis
-                    repellat? Iste.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* ================ Slider Three ================== */}
-
-          <div className="w-full">
-            <div className="w-full h-auto flex flex-col lgl:flex-row justify-between">
-              <div className="w-full lgl:w-[35%] h-full bg-gradient-to-r from-[#1e2024] to-[#23272b] p-8 rounded-lg shadow-shadowOne flex flex-col md:flex-row lgl:flex-col gap-8 justify-center md:justify-start lgl:justify-center">
-                <img
-                  className="h-72 md:h-32 lgl:h-72 rounded-lg object-cover"
-                  src={testimonialOne}
-                  alt="testimonialOne"
-                />
-                <div className="w-full flex flex-col justify-end">
-                  <p className="text-xs uppercase text-designColor tracking-wide mb-2">
-                    Bound - Trolola
-                  </p>
-                  <h3 className="text-2xl font-bold">Jone Duone Joe</h3>
-                  <p className="text-base tracking-wide text-gray-500">
-                    Operation Officer
-                  </p>
-                </div>
-              </div>
-              <div className="w-full lgl:w-[60%] h-full flex flex-col justify-between">
-                <img className="w-20 lgl:w-32" src={quote} alt="quote" />
-                <div className="w-full h-[70%] py-10 bg-gradient-to-r from-[#1e2024] to-[#23272b] rounded-lg shadow-shadowOne p-4 lgl:p-8 flex flex-col justify-center gap-4 lgl:gap-8">
-                  <div className="flex flex-col justify-between lgl:items-center py-6 border-b-2 border-b-gray-900">
-                    <div>
-                      <h3 className="text-xl lgl:text-2xl font-medium tracking-wide">
-                        Travel Mobile App Design.
-                      </h3>
-                      <p className="text-base text-gray-400 mt-3">
-                        via Upwork - Mar 4, 2015 - Aug 30, 2021 test
-                      </p>
-                    </div>
-                    <div className="text-yellow-500 flex gap-1">
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                      <RiStarFill />
-                    </div>
-                  </div>
-                  <p className="text-base font-titleFont text-gray-400 font-medium tracking-wide leading-6">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
-                    dolorum, eos natus ipsum numquam veniam officia
-                    necessitatibus ratione quos debitis exercitationem
-                    repudiandae facilis id neque nihil accusantium perspiciatis
-                    repellat? Iste.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Slider>
+        </div>
       </div>
     </section>
   );
-}
+};
 
-export default Testimonial
+export default Testimonial;
