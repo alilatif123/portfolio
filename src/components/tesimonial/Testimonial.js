@@ -84,7 +84,7 @@ const Testimonial = () => {
         <div className="mb-16 text-center">
           <Title 
             title="CLIENT TESTIMONIALS" 
-            des="What Our Clients Say"
+            des="What Clients Say"
           />
         </div>
         
