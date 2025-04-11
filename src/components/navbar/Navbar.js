@@ -1,20 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Link } from "react-scroll";
 import { FiMenu } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
-import {logo} from "../../assets/index"
-import { navLinksdata } from '../../constants';
+import { logo } from "../../assets/index"; // Make sure logo path is correct
+import { navLinksdata } from '../../constants'; // Make sure navLinksdata path is correct
 
 const Navbar = () => {
-  const [showMenu, setShowMenu]=useState(false)
-  
+  const [showMenu, setShowMenu] = useState(false);
+
+  // Define bannerIcon style here if not defined globally or imported
+  // Example: (Adjust styles as needed)
+  const bannerIconStyle = "w-10 h-10 bg-black bg-opacity-25 text-gray-200 text-xl inline-flex items-center justify-center rounded-md shadow-shadowOne hover:bg-opacity-40 hover:-translate-y-1 transition-all hover:text-designColor cursor-pointer duration-300";
+
+
   return (
-    <div className="w-full h-24 sticky top-0 z-50 bg-bodyColor mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600">
+    <div className="w-full h-24 sticky top-0 z-50 bg-bodyColor mx-auto flex justify-between items-center font-titleFont border-b-[1px] border-b-gray-600 px-4"> {/* Added px-4 for padding */}
       <div>
-        <img src={logo} alt="logo" className="w-32 cursor-pointer"  />
+        {/* Consider making the logo a link to the top/home */}
+        <Link to="home" spy={true} smooth={true} offset={-70} duration={500}>
+          <img src={logo} alt="logo" className="w-28 md:w-32 cursor-pointer" /> {/* Adjusted size slightly */}
+        </Link>
       </div>
       <div>
+        {/* Desktop Navigation */}
         <ul className="hidden mdl:inline-flex items-center gap-6 lg:gap-10">
           {navLinksdata.map(({ _id, title, link }) => (
             <li
@@ -22,11 +31,11 @@ const Navbar = () => {
               key={_id}
             >
               <Link
-                activeClass="active"
+                activeClass="active" // Ensure you have styles for .active class
                 to={link}
                 spy={true}
                 smooth={true}
-                offset={-70}
+                offset={-70} // Adjust offset based on your sticky navbar height
                 duration={500}
               >
                 {title}
@@ -34,31 +43,46 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
+
+        {/* Mobile Menu Icon */}
         <span
-          onClick={() => setShowMenu(!showMenu)}
+          onClick={() => setShowMenu(true)} // Changed to only open
           className="text-xl mdl:hidden bg-black w-10 h-10 inline-flex items-center justify-center rounded-full text-designColor cursor-pointer"
         >
           <FiMenu />
         </span>
+
+        {/* Mobile Menu Overlay - Redesigned */}
         {showMenu && (
-          <div className="w-[80%] h-screen overflow-scroll absolute top-0 left-0 bg-gray-900 p-4 scrollbar-hide">
-            <div className="flex flex-col gap-8 py-2 relative">
-              <div>
-                <img className="w-32" src={logo} alt="logo" />
-                <p className="text-sm text-gray-400 mt-2">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Earum soluta perspiciatis molestias enim cum repellat, magnam
-                  exercitationem distinctio aliquid nam.
-                </p>
-              </div>
-              <ul className="flex flex-col gap-4">
+          <div
+            // Overlay Container: Full screen, flex center, background, transition
+            className={`w-full h-screen fixed top-0 left-0 bg-black bg-opacity-90 backdrop-blur-sm flex flex-col items-center justify-center z-50 transition-opacity duration-300 ease-in-out ${showMenu ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} // Use fixed positioning
+            // onClick={() => setShowMenu(false)} // Optional: Close menu when clicking overlay background
+          >
+            {/* Close Button */}
+            <span
+              onClick={() => setShowMenu(false)}
+              className="absolute top-6 right-6 text-gray-400 hover:text-designColor duration-300 text-3xl cursor-pointer" // Increased size
+            >
+              <MdClose />
+            </span>
+
+            {/* Menu Content Container */}
+            <div className="flex flex-col items-center gap-10"> {/* Increased gap */}
+                {/* Logo inside menu */}
+                 <Link to="home" spy={true} smooth={true} offset={-70} duration={500} onClick={() => setShowMenu(false)}>
+                     <img className="w-32 mb-4" src={logo} alt="logo" /> {/* Centered by parent flex */}
+                 </Link>
+
+              {/* Navigation Links */}
+              <ul className="flex flex-col gap-6 text-center"> {/* Increased gap */}
                 {navLinksdata.map((item) => (
                   <li
                     key={item._id}
-                    className="text-base font-normal text-gray-400 tracking-wide cursor-pointer hover:text-designColor duration-300"
+                    className="text-xl font-normal text-gray-400 tracking-wide cursor-pointer hover:text-designColor duration-300" // Increased text size
                   >
                     <Link
-                      onClick={() => setShowMenu(false)}
+                      onClick={() => setShowMenu(false)} // Close menu on link click
                       activeClass="active"
                       to={item.link}
                       spy={true}
@@ -71,28 +95,25 @@ const Navbar = () => {
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-col gap-4">
-                <h2 className="text-base uppercase font-titleFont mb-4">
+
+              {/* Social Links Section */}
+              <div className="flex flex-col items-center gap-4 mt-6"> {/* Added margin-top */}
+                <h2 className="text-base uppercase font-titleFont mb-2 text-gray-400"> {/* Adjusted margin */}
                   Find me in
                 </h2>
                 <div className="flex gap-4">
-                  <span className="bannerIcon">
-                    <FaFacebookF />
+                    {/* Applied the example style directly, replace with your 'bannerIcon' class if defined elsewhere */}
+                  <span className={bannerIconStyle}>
+                     <a href="YOUR_FACEBOOK_URL" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
                   </span>
-                  <span className="bannerIcon">
-                    <FaTwitter />
+                  <span className={bannerIconStyle}>
+                     <a href="YOUR_TWITTER_URL" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
                   </span>
-                  <span className="bannerIcon">
-                    <FaLinkedinIn />
+                  <span className={bannerIconStyle}>
+                     <a href="YOUR_LINKEDIN_URL" target="_blank" rel="noopener noreferrer"><FaLinkedinIn /></a>
                   </span>
                 </div>
               </div>
-              <span
-                onClick={() => setShowMenu(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-designColor duration-300 text-2xl cursor-pointer"
-              >
-                <MdClose />
-              </span>
             </div>
           </div>
         )}
@@ -101,4 +122,4 @@ const Navbar = () => {
   );
 }
 
-export default Navbar
+export default Navbar;
