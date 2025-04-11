@@ -7,6 +7,7 @@ import Projects from "./components/projects/Projects";
 import Testimonial from "./components/tesimonial/Testimonial";
 import SocialButtons from "./SocialButtons";
 import ServiceInquiryForm from "./components/contact/ServiceInquiryForm";
+import UnderConstructionModal from "./components/construction/UnderConstructionModal";
 
 function App() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -132,6 +133,7 @@ function App() {
   return (
     <div className="w-full h-auto bg-bodyColor text-lightText px-4">
       <CustomCursor position={mousePosition} isHovering={isHovering} />
+      <UnderConstructionModal />
       <Navbar />
       <SocialButtons />
       <div className="max-w-screen-xl mx-auto">
